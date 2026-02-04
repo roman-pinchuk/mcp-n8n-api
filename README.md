@@ -38,7 +38,22 @@ A Model Context Protocol (MCP) server that provides comprehensive access to n8n 
 
 ## Installation
 
-### Option 1: Local Installation
+### Option 1: Use Pre-built Docker Image (Easiest)
+
+Pull the latest image from GitHub Container Registry:
+
+```bash
+# Pull the latest image
+docker pull ghcr.io/[your-username]/mcp-n8n-api:latest
+
+# Run with environment variables
+docker run -it --rm \
+  -e N8N_API_URL=http://host.docker.internal:5678/api/v1 \
+  -e N8N_API_KEY=your_api_key \
+  ghcr.io/[your-username]/mcp-n8n-api:latest
+```
+
+### Option 2: Local Installation
 
 ```bash
 # Install dependencies
@@ -278,6 +293,34 @@ npm run build
 5. **Run as non-root** - Docker image uses unprivileged user
 6. **Network isolation** - Use Docker networks for container communication
 
+## CI/CD and Releases
+
+This project uses GitHub Actions for automated Docker image builds.
+
+### Creating a Release
+
+1. Tag your commit with semantic versioning:
+   ```bash
+   git tag -a v1.0.0 -m "Release version 1.0.0"
+   git push origin v1.0.0
+   ```
+
+2. Create a release on GitHub (or use `gh release create v1.0.0`)
+
+3. The workflow automatically:
+   - Builds multi-platform Docker images (amd64, arm64)
+   - Pushes to GitHub Container Registry
+   - Tags with semantic versioning
+   - Generates security attestation
+
+### Using Pre-built Images
+
+```bash
+docker pull ghcr.io/[username]/mcp-n8n-api:latest
+```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) and [.github/WORKFLOW_GUIDE.md](.github/WORKFLOW_GUIDE.md) for details.
+
 ## Contributing
 
 Contributions are welcome! Please ensure:
@@ -285,6 +328,7 @@ Contributions are welcome! Please ensure:
 - Code follows existing patterns
 - Environment variables are documented
 - Docker builds successfully
+- Tests pass (if applicable)
 
 ## License
 
