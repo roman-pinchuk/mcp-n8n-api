@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  mcp-n8n-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mcp-n8n-api
+    environment:
+      - N8N_API_URL=${N8N_API_URL}
+      - N8N_API_KEY=${N8N_API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    restart: unless-stopped
+    # For stdio transport, you'll run this interactively
+    stdin_open: true
+    tty: true
+    networks:
+      - n8n-network
+
+networks:
+  n8n-network:
+    driver: bridge
